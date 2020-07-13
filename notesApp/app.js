@@ -32,6 +32,12 @@ yargs.command({
     },
   },
   handler: argv => {
+    const { title, message } = argv;
+    const note = { title, message };
+    const noteJSON = JSON.stringify(note);
+    console.log(noteJSON);
+    const noteUnJSON = JSON.parse(noteJSON);
+    console.log(noteUnJSON);
     console.log(
       `${chalk.cyan('Adding new note:')}\n ${chalk.yellow('title:')} ${
         argv.title
