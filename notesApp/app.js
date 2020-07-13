@@ -1,8 +1,14 @@
 const fs = require('fs');
 const yargs = require('yargs');
 const chalk = require('chalk');
-const { successLog, errorLog, variableLog, textLog } = require('./chalkLogs');
-const getNotes = require('./notes.js');
+const {
+  successLog,
+  errorLog,
+  variableLog,
+  textLog,
+  commandLog,
+} = require('./chalkLogs');
+const { addNote, removeNote, readNote, listNotes } = require('./notes.js');
 
 // customize yargs version
 yargs.version('1.1.0');
@@ -32,17 +38,7 @@ yargs.command({
     },
   },
   handler: argv => {
-    const { title, message } = argv;
-    const note = { title, message };
-    const noteJSON = JSON.stringify(note);
-    console.log(noteJSON);
-    const noteUnJSON = JSON.parse(noteJSON);
-    console.log(noteUnJSON);
-    console.log(
-      `${chalk.cyan('Adding new note:')}\n ${chalk.yellow('title:')} ${
-        argv.title
-      }\n ${chalk.yellow('message:')} ${argv.message}`
-    );
+    addNote(argv.title, argv.message);
   },
 });
 
@@ -50,16 +46,16 @@ yargs.command({
 yargs.command({
   command: 'remove',
   describe: '\x1b[36mRemove an existing note\x1b[0m',
-  handler: () => {
-    textLog('Removing a note');
+  handler: argv => {
+    removeNote(argv.title);
   },
 });
 
 yargs.command({
   command: 'read',
   describe: '\x1b[36mRead notes\x1b[0m',
-  handler: () => {
-    textLog('Reading a note');
+  handler: argv => {
+    commandLog('read', argv.title, argv.message);
   },
 });
 
