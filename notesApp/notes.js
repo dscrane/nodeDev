@@ -29,11 +29,9 @@ saveNotes = notes => {
 const addNote = (title, body) => {
   const notes = loadNotes();
 
-  const duplicateNotes = notes.filter(note => {
-    return note.title === title;
-  });
+  const duplicateNote = notes.find(note => note.title === title);
 
-  if (duplicateNotes.length === 0) {
+  if (!duplicateNote) {
     commandLog('add', title, body);
     notes.push({ title: title, body: body });
     saveNotes(notes);
@@ -45,9 +43,7 @@ const addNote = (title, body) => {
 const removeNote = title => {
   const notes = loadNotes();
 
-  const notesToKeep = notes.filter(note => {
-    return note.title !== title;
-  });
+  const notesToKeep = notes.filter(note => note.title !== title);
 
   if (notesToKeep.length === notes.length) {
     errorLog('Notes', 'There is no note with this title');
@@ -58,8 +54,22 @@ const removeNote = title => {
   }
 };
 
-const readNote = title => {};
+const readNote = title => {
+  const notes = loadNotes();
 
-const listNotes = () => {};
+  const matchingNote = notes.find(note => note.title === title);
+
+  matchingNote
+    ? commandLog('read', matchingNote.title, matchingNote.body)
+    : errorLog('Notes', 'There is no note matching this title');
+};
+
+const listNotes = () => {
+  const notes = loadNotes();
+  commandLog('All Notes:');
+  notes.forEach(note => {
+    commandLog('list', note.title, note.body);
+  });
+};
 
 module.exports = { addNote, removeNote, readNote, listNotes };

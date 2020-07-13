@@ -59,6 +59,17 @@ const commandLog = (command, title, message = null) => {
         message
     );
   }
+
+  if (command === 'list') {
+    log(
+      '\n' +
+        chalk.yellow(' title: ') +
+        title +
+        '\n' +
+        chalk.yellow(' message: ') +
+        message
+    );
+  }
 };
 
 module.exports = { successLog, errorLog, variableLog, textLog, commandLog };

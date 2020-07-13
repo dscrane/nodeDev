@@ -1,13 +1,4 @@
-const fs = require('fs');
 const yargs = require('yargs');
-const chalk = require('chalk');
-const {
-  successLog,
-  errorLog,
-  variableLog,
-  textLog,
-  commandLog,
-} = require('./chalkLogs');
 const { addNote, removeNote, readNote, listNotes } = require('./notes.js');
 
 // customize yargs version
@@ -37,7 +28,7 @@ yargs.command({
       type: 'string',
     },
   },
-  handler: argv => {
+  handler(argv) {
     addNote(argv.title, argv.message);
   },
 });
@@ -54,16 +45,16 @@ yargs.command({
 yargs.command({
   command: 'read',
   describe: '\x1b[36mRead notes\x1b[0m',
-  handler: argv => {
-    commandLog('read', argv.title, argv.message);
+  handler(argv) {
+    readNote(argv.title);
   },
 });
 
 yargs.command({
   command: 'list',
   describe: '\x1b[36mList all notes\x1b[0m',
-  handler: () => {
-    textLog('Listing all notes');
+  handler() {
+    listNotes();
   },
 });
 
