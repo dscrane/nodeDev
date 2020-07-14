@@ -17,19 +17,20 @@ const loadNotes = () => {
 };
 
 saveNotes = notes => {
-  try {
-    const notesJSON = JSON.stringify(notes);
-    fs.writeFileSync('notes.json', notesJSON);
-    successLog('Success', 'Note added successfully');
-  } catch (err) {
+  // try {
+  const notesJSON = JSON.stringify(notes);
+  fs.writeFileSync('notes.json', notesJSON);
+  successLog('Success', 'Note added successfully');
+  /* } catch (err) {
     errorLog('File System', 'There was an issue adding the new note');
-  }
+  } */
 };
 
 const addNote = (title, body) => {
   const notes = loadNotes();
-
   const duplicateNote = notes.find(note => note.title === title);
+
+  debugger;
 
   if (!duplicateNote) {
     commandLog('add', title, body);

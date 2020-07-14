@@ -1,2 +1,0 @@
-My name is First Name 
-This line was appended using node
