@@ -37,7 +37,7 @@ yargs.command({
 yargs.command({
   command: 'remove',
   describe: '\x1b[36mRemove an existing note\x1b[0m',
-  handler: argv => {
+  handler(argv) {
     removeNote(argv.title);
   },
 });

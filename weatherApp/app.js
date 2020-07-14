@@ -1,40 +1,27 @@
-const { errorLog } = require('./chalkLogs copy');
-const request = require('postman-request');
-const dotenv = require('dotenv');
-dotenv.config();
+const chalk = require('chalk');
+const { errorLog, textLog } = require('./chalkLogs copy');
+const geocode = require('./utils/geocode');
+const weatherStack = require('./utils/weatherStack');
 
-const mapboxUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/boston.json?access_token=${process.env.MAPBOXKEY}&limit=1`;
+let searchLocation = process.argv[2];
 
-request({ url: mapboxUrl, json: true }, (err, res) => {
-  if (err) {
-    errorLog('Mapbox API', 'Unable to connect to location services');
-  } else if (res.body.features.length === 0) {
-    errorLog(
-      'Mapbox API',
-      'Unable to find location. Please try a different search term'
-    );
-  } else {
-    const lat = res.body.features[0].center[1];
-    const long = res.body.features[0].center[0];
-    console.log(`The latitude is ${lat} and the longitude is ${long}`);
-  }
-});
-
-/* const queryData = `${searchLat},${searchLong}`;
-const weatherUrl = `http://api.weatherstack.com/current?access_key=${process.env.ACCESSKEY}&query=${queryData}&units=f`;
-request({ url: weatherUrl, json: true }, (err, res) => {
-  if (err) {
-    errorLog('Weather Stack API', 'Unable to connect to the weather service');
-  } else if (res.body.error) {
-    errorLog('Weather Stack API', 'Unable to find this location.');
-  } else {
-    const temp = res.body.current.temperature;
-    const feelsTemp = res.body.current.feelslike;
-    const description = res.body.current.weather_descriptions[0];
-
-    console.log(
-      `${description}. It is currently ${temp} degrees outside but it feels like ${feelsTemp} degrees.`
-    );
-  }
-});
- */
+if (!searchLocation) {
+  errorLog('Invalid Input', 'Please provide a location like this:');
+  textLog('  node app.js <location>');
+} else {
+  geocode(searchLocation, (err, data) => {
+    if (err) {
+      return errorLog('Mapbox API', err);
+    } else {
+      weatherStack(data.lat, data.long, (err, forecast) => {
+        if (err) {
+          return errorLog('Weather Stack API', err);
+        } else {
+          console.log(
+            chalk`{cyan Forecast for ${data.location}:}\n  {yellow Currently:} ${forecast.description}\n  {yellow Temperature:} ${forecast.temp}\n  {yellow Feels Like:} ${forecast.feelsTemp}`
+          );
+        }
+      });
+    }
+  });
+}

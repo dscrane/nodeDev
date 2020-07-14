@@ -2,7 +2,7 @@ const chalk = require('chalk');
 const log = console.log;
 
 const textLog = message => {
-  log('\n', chalk.cyan(message));
+  log(chalk.cyan(message));
 };
 
 const successLog = (title, content) => {
