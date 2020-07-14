@@ -10,15 +10,24 @@ if (!searchLocation) {
   textLog('  node app.js <location>');
 } else {
   geocode(searchLocation, (err, data) => {
+    const { lat, long, location } = data;
     if (err) {
       return errorLog('Mapbox API', err);
     } else {
-      weatherStack(data.lat, data.long, (err, forecast) => {
+      weatherStack(lat, long, (err, forecast) => {
+        const {
+          description,
+          temp,
+          feelsTemp,
+          windSpeed,
+          humidity,
+          uvIndex,
+        } = forecast;
         if (err) {
           return errorLog('Weather Stack API', err);
         } else {
           console.log(
-            chalk`{cyan Forecast for ${data.location}:}\n  {yellow Currently:} ${forecast.description}\n  {yellow Temperature:} ${forecast.temp}\n  {yellow Feels Like:} ${forecast.feelsTemp}`
+            chalk`{cyan Forecast for ${location}:}\n  {yellow Currently:} ${description}\n  {yellow Temperature:} ${temp}\n  {yellow Feels Like:} ${feelsTemp}\n  {yellow Wind Speed:} ${windSpeed}\n  {yellow Humidity:} ${humidity}\n  {yellow UV Index:} ${uvIndex}`
           );
         }
       });
