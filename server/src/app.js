@@ -1,6 +1,8 @@
 const path = require('path');
 const express = require('express');
 const hbs = require('hbs');
+const geocode = require('./utils/geocode');
+const weatherStack = require('./utils/weatherStack');
 
 const app = express();
 // Define paths for Express Config
@@ -42,12 +44,42 @@ app.get('/help', (req, res) => {
 
 // Set up weather page route
 app.get('/weather', (req, res) => {
-  res.send({
-    location: 'Boston, Massachusetts',
-    forecast: {
-      temp: '75',
-      feelsLike: '80',
-    },
+  if (!req.query.address) {
+    return res.send({
+      error: 'An address must be provided',
+    });
+  }
+
+  const searchLocation = req.query.address;
+  geocode(searchLocation, (err, data) => {
+    const { lat, long, location } = data;
+    if (err) {
+      return res.send({
+        err,
+      });
+    } else {
+      weatherStack(lat, long, (err, forecast) => {
+        const {
+          description,
+          temp,
+          feelsTemp,
+          windSpeed,
+          humidity,
+          uvIndex,
+        } = forecast;
+        if (err) {
+          return res.send({
+            err,
+          });
+        } else {
+          return res.send({
+            forecast: `Forecast for ${location}:\n  Currently: ${description}\n  Temperature: ${temp}\n  Feels Like: ${feelsTemp}\n  WindSpeed: ${windSpeed}\n  Humidity: ${humidity}\n  UV Index: ${uvIndex}`,
+            location,
+            searchLocation,
+          });
+        }
+      });
+    }
   });
 });
 
