@@ -11,7 +11,7 @@ const weatherStack = (lat, long, callback) => {
       callback('Unable to find this location.');
     } else {
       const temp = body.current.temperature;
-      const feelsTemp = body.current.feelslike;
+      const feelsLike = body.current.feelslike;
       const description = body.current.weather_descriptions[0];
       const uvIndex = body.current.uv_index;
       const humidity = body.current.humidity;
@@ -19,7 +19,7 @@ const weatherStack = (lat, long, callback) => {
 
       callback(undefined, {
         temp,
-        feelsTemp,
+        feelsLike,
         description,
         uvIndex,
         humidity,

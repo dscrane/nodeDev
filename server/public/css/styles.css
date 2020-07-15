@@ -36,6 +36,35 @@ header a:hover {
   border-bottom: 1px solid #333333;
 }
 
+div p {
+  text-align: center;
+}
+
+form {
+  text-align: center;
+}
+
+input {
+  border: 1px solid #cccccc;
+  padding: 8px;
+}
+
+button {
+  cursor: pointer;
+  border: 1px solid #888888;
+  background-color: #888888;
+  color: white;
+  padding: 8px;
+}
+
+button:hover {
+  background-color: #555555;
+}
+
+#message {
+  font-weight: 700;
+}
+
 .aboutImg {
   width: 250px;
   margin: 0 0;

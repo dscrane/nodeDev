@@ -1,10 +1,14 @@
 const path = require('path');
 const express = require('express');
 const hbs = require('hbs');
+const cors = require('cors');
 const geocode = require('./utils/geocode');
 const weatherStack = require('./utils/weatherStack');
 
 const app = express();
+
+app.use(cors());
+
 // Define paths for Express Config
 const publicDir = path.join(__dirname, '../public');
 const viewsPath = path.join(__dirname, '../templates/views');
@@ -51,8 +55,7 @@ app.get('/weather', (req, res) => {
   }
 
   const searchLocation = req.query.address;
-  geocode(searchLocation, (err, data) => {
-    const { lat, long, location } = data;
+  geocode(searchLocation, (err, { lat, long, location } = {}) => {
     if (err) {
       return res.send({
         err,
@@ -62,7 +65,7 @@ app.get('/weather', (req, res) => {
         const {
           description,
           temp,
-          feelsTemp,
+          feelsLike,
           windSpeed,
           humidity,
           uvIndex,
@@ -73,7 +76,12 @@ app.get('/weather', (req, res) => {
           });
         } else {
           return res.send({
-            forecast: `Forecast for ${location}:\n  Currently: ${description}\n  Temperature: ${temp}\n  Feels Like: ${feelsTemp}\n  WindSpeed: ${windSpeed}\n  Humidity: ${humidity}\n  UV Index: ${uvIndex}`,
+            description,
+            temp,
+            feelsLike,
+            windSpeed,
+            humidity,
+            uvIndex,
             location,
             searchLocation,
           });
