@@ -18,6 +18,7 @@ MongoClient.connect(
     }
 
     const db = client.db(databaseName);
+    // Create using mongodb
     /* 
     db.collection('users').insertOne(
       {
@@ -33,8 +34,8 @@ MongoClient.connect(
         console.log(result.ops);
       }
     );
- */
-    /* db.collection('users').insertMany(
+ 
+    db.collection('users').insertMany(
       [
         {
           name: 'Jen',
@@ -52,9 +53,10 @@ MongoClient.connect(
 
         console.log(result.ops);
       }
-    ); */
+    ); 
+  
 
-    /*  db.collection('tasks').insertMany(
+    db.collection('tasks').insertMany(
       [
         {
           description: 'Get Mongodb working',
@@ -76,9 +78,12 @@ MongoClient.connect(
 
         console.log(result.ops);
       }
-    ); */
+    ); 
+  */
 
-    /* db.collection('users').findOne(
+    // Read using mongodb
+    /* 
+    db.collection('users').findOne(
       { _id: ObjectID('5f11b6dc741758323a690fbf') },
       (err, result) => {
         if (err) {
@@ -87,17 +92,84 @@ MongoClient.connect(
 
         console.log(result);
       }
-    ); */
-
-    /* db.collection('users')
+    ); 
+    
+    db.collection('users')
       .find({ name: 'Daegan' })
       .toArray((err, result) => {
         console.log(result);
       });
+
     db.collection('users')
       .find({ name: 'Daegan' })
       .count((err, result) => {
         console.log(result);
-      }); */
+      }); 
+
+      db.collection('tasks').findOne(
+      { _id: ObjectID('5f11bf6947da683290e423bd') },
+      (err, result) => {
+        if (err) {
+          return console.log(err);
+        }
+
+        console.log(result);
+      }
+    );
+
+    db.collection('tasks')
+      .find({ completed: false })
+      .toArray((err, result) => {
+        console.log(result);
+      });
+  */
+
+    // Update using mongodb
+    /*
+    db.collection('users')
+      .updateOne(
+        { _id: new ObjectID('5f11b6dc741758323a690fbf') },
+        {
+          $inc: {
+            age: 1,
+          },
+        }
+      )
+      .then(result => {
+        console.log(result.matchedCount);
+      })
+      .catch(err => {
+        console.log(err);
+      }); 
+
+    db.collection('tasks')
+      .updateMany(
+        {},
+        {
+          $rename: {
+            desctiption: 'description',
+          },
+        }
+      )
+      .then(result => {
+        console.log(result.modifiedCount);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    */
+
+    // Delete using mongodb
+    /*
+    db.collection('users')
+    .deleteMany({ age: 25 })
+    .then(result => console.log(result))
+    .catch(err => console.log(err));
+
+    db.collection('tasks')
+      .deleteOne({ description: 'Eat breakfast' })
+      .then(result => console.log(result))
+      .catch(err => console.log(err));
+  */
   }
 );

@@ -13,21 +13,14 @@ MongoClient.connect(
 
     const db = client.db(databaseName);
 
-    db.collection('tasks').findOne(
-      { _id: ObjectID('5f11bf6947da683290e423bd') },
-      (err, result) => {
-        if (err) {
-          return console.log(err);
-        }
-
-        console.log(result);
-      }
-    );
+    db.collection('users')
+      .deleteMany({ age: 25 })
+      .then(result => console.log(result))
+      .catch(err => console.log(err));
 
     db.collection('tasks')
-      .find({ completed: false })
-      .toArray((err, result) => {
-        console.log(result);
-      });
+      .deleteOne({ description: 'Eat breakfast' })
+      .then(result => console.log(result))
+      .catch(err => console.log(err));
   }
 );
