@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 
-const databaseName = 'task-manager-api';
-const connectionURL = `mongodb://127.0.0.1:27017/${databaseName}`;
+const connectionURL = process.env.DB_URL;
 
 mongoose.connect(connectionURL, {
   useNewUrlParser: true,
