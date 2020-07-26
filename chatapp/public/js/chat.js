@@ -7,17 +7,22 @@ const locationCta = document.querySelector('#location-cta');
 const messageFormButton = messageForm.querySelector('button');
 const messages = document.querySelector('#messages');
 
-//Templates
+// Templates
 const messageTemplate = document.querySelector('#message-template').innerHTML;
 const locationMessageTemplate = document.querySelector(
   '#location-message-template'
 ).innerHTML;
 
+// Options
+const { username, room } = Qs.parse(location.search, {
+  ignoreQueryPrefix: true,
+});
 // Socket event for when a user wishes to send a messsage to other users
 socket.on('message', message => {
   /* console.log(message); */
 
   const html = Mustache.render(messageTemplate, {
+    username,
     message: message.text,
     createdAt: moment(message.createdAt).format('h:mm a'),
   });
@@ -79,3 +84,5 @@ locationCta.addEventListener('click', () => {
     });
   });
 });
+
+socket.emit('join', { username, room });
