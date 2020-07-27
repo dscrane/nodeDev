@@ -17,12 +17,14 @@ const locationMessageTemplate = document.querySelector(
 const { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
+console.log(location);
+console.log(username, room);
 // Socket event for when a user wishes to send a messsage to other users
 socket.on('message', message => {
   /* console.log(message); */
 
   const html = Mustache.render(messageTemplate, {
-    username,
+    username: message.username,
     message: message.text,
     createdAt: moment(message.createdAt).format('h:mm a'),
   });
@@ -33,6 +35,7 @@ socket.on('message', message => {
 socket.on('locationMessage', message => {
   // Create the html for the mustache template for sending the location
   const html = Mustache.render(locationMessageTemplate, {
+    username: message.username,
     location: message.locationUrl,
     createdAt: moment(message.createdAt).format('h:mm a'),
   });
@@ -85,4 +88,9 @@ locationCta.addEventListener('click', () => {
   });
 });
 
-socket.emit('join', { username, room });
+socket.emit('join', { username, room }, err => {
+  if (err) {
+    alert(err);
+    location.href = '/';
+  }
+});
